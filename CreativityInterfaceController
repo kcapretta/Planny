@@ -1,0 +1,64 @@
+//
+//  CreativityInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/23/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import WatchKit
+import Foundation
+
+class CreativityInterfaceController: WKInterfaceController {
+    
+    //MARK:- Interface Builder
+    @IBOutlet weak var creativityTable: WKInterfaceTable!
+    
+    //MARK:- Properties
+    var creativityArray =
+        [DataProvided(title: " PAINTING", time: "5", cardNumberData: "1", outOfNumberData: "/ 5", imageName: "PAINTING"),
+         DataProvided(title: " DRAWING", time: "45:00", cardNumberData: "2", outOfNumberData: "/ 5", imageName: "DRAWING"),
+         DataProvided(title: " PRODUCTION", time: "50:00", cardNumberData: "3", outOfNumberData: "/ 5", imageName: "MUSIC PRODUCTION"),
+         DataProvided(title: " VIOLIN", time: "30:00", cardNumberData: "4", outOfNumberData: "/ 5", imageName: "VIOLIN"),
+         DataProvided(title: " PIANO", time: "20:00", cardNumberData: "5", outOfNumberData: "/ 5", imageName: "PIANO")]
+    var selectedData = DataProvided()
+    
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        self.loadRoutineData()
+        
+        let numberOfDevice = Int() + 1
+        
+    }
+    
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+    }
+    
+    override func didDeactivate() {
+        // This method is called when watch view controller is no longer visible
+        super.didDeactivate()
+    }
+    
+    //MARK:- Private Methods
+    func loadRoutineData(){
+        creativityTable.setNumberOfRows(creativityArray.count, withRowType: "creativityTableRow")
+        for (index, content) in creativityArray.enumerated() {
+            let row = creativityTable.rowController(at: index) as! TablePartsController
+            row.allDataLabel.setText(content.title)
+            row.timeLabel.setText(content.time)
+            row.imageData.setImage(UIImage(named: content.imageName))
+        }
+    }
+}
+
+// EXTENSION - Push to Interface Controller
+extension CreativityInterfaceController {
+    override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
+        // Send JSON Data
+        let arrayData = creativityArray[rowIndex]
+        self.pushController(withName: "TableTimerInterfaceController", context: self.creativityArray[rowIndex])
+    }
+}
