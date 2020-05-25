@@ -1,0 +1,67 @@
+//
+//  CheckmarkInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/15/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import WatchKit
+import Foundation
+
+
+class CheckmarkInterfaceController: WKInterfaceController {
+
+    //MARK:- Interface Builder
+    @IBOutlet weak var backgroundGroup: WKInterfaceGroup!
+    
+    //MARK:- Properties
+    var counter : Int!
+    var timer : Timer!
+    var selectedData = DataProvided()
+            
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        counter = 1
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        backgroundGroup.setBackgroundImageNamed("TeacupAnimation")
+        animateT()
+    }
+    
+    func animateT() {
+        // Start "T" Animation
+        let duration = 1.5
+        let delay = DispatchTime.now() + (duration + 2.85)
+        backgroundGroup.startAnimatingWithImages(in: NSRange(location: 0, length: 40),
+                                                 duration: duration,
+                                                 repeatCount: 3)
+        DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
+            self?.dismiss()
+        }
+        // End "T" Animation
+    }
+
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+    }
+
+    override func didDeactivate() {
+        // This method is called when watch view controller is no longer visible
+        super.didDeactivate()
+    }
+        
+    //MARK:- Private Methods
+    @objc func updateTimer() {
+        
+        if(counter == 0) {
+            timer.invalidate()
+            timer = nil
+            
+            pushController(withName: "LibraryInterfaceController", context: nil)
+        }
+         //descrement counter by 1
+        counter = counter - 1
+    }
+}
