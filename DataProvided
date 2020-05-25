@@ -1,0 +1,93 @@
+//
+//  DataProvided.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/17/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import Foundation
+
+class DataProvided {
+    var title: String = ""
+    var time: String = ""
+    var cardNumberData: String = ""
+    var outOfNumberData: String = ""
+    var imageName: String = ""
+    // var description: String = ""
+    
+    init(){}
+    
+    init(title: String, time: String, cardNumberData: String, outOfNumberData: String,
+         imageName: String) {
+        self.title = title
+        self.time = time
+        self.imageName = imageName
+        self.cardNumberData = cardNumberData
+        self.outOfNumberData = outOfNumberData
+       // self.description = description
+    }
+
+}
+
+struct ProperTime {
+    
+    let minutes: Int
+    let seconds: Int
+    
+    init(minutes: Int, seconds: Int) {
+        self.minutes = minutes
+        self.seconds = seconds
+    }
+    
+    init(timeString: String) {
+        let timeParts = timeString.split(separator: ":")
+        
+        if timeParts.count == 1, let secondsString = timeParts.first, let seconds = Int(String(secondsString)) {
+            self.seconds = seconds
+            self.minutes = 0
+            return
+        }
+        
+        if timeParts.count == 2,
+            let minutes = Int(String(timeParts[0])),
+            let seconds = Int(String(timeParts[1])) {
+            self.seconds = seconds
+            self.minutes = minutes
+            return
+        }
+        
+        fatalError("Couldn't parse")
+    }
+    
+    func substracting(numberOfSeconds: Int) -> ProperTime {
+        if seconds > 0 {
+            return ProperTime(minutes: minutes, seconds: seconds - 1)
+        }
+        
+        if minutes > 0 {
+            return ProperTime(minutes: minutes - 1, seconds: 60)
+        }
+        
+        return ProperTime(minutes: 0, seconds: 0)
+    }
+    
+    func toString() -> String {
+        let minutesString = minutes < 10 ? "0\(minutes)" : "\(minutes)"
+        let secondsString = seconds < 10 ? "0\(seconds)" : "\(seconds)"
+        
+        return "\(minutesString):\(secondsString)"
+    }
+    
+    var finished: Bool {
+        return minutes == 0 && seconds == 0
+    }
+    
+}
+
+
+class tableNumber {
+    var tableDataNumber: String = ""
+    
+    }
+
