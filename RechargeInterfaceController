@@ -1,0 +1,76 @@
+//
+//  RechargeInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/22/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import WatchKit
+import Foundation
+import UIKit
+
+
+class RechargeInterfaceController: WKInterfaceController {
+    
+    //MARK:- Interface Builder
+    @IBOutlet weak var rechargeTableView: WKInterfaceTable!
+    
+    //MARK:- Properties
+    var rechargeArray = [DataProvided(title: " WORKOUT", time: "40:00", cardNumberData: "1", outOfNumberData: "/ 3", imageName: "WORKOUT"),
+                        DataProvided(title: " YOGA", time: "20:00", cardNumberData: "2", outOfNumberData: "/ 3", imageName: "YOGA"),
+                        DataProvided(title: " MEDITATION", time: "5:00", cardNumberData: "3", outOfNumberData: "/ 3", imageName: "MEDITATION")]
+    
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        print("rechargeTableView", rechargeTableView)
+        self.loadRechargeData()
+        
+        let numberOfDevice = Int() + 1
+        
+        // Communicate Unique ID
+        // THIS IS A PART OF "awsCall" Function
+//        if UserDefaults.standard.string(forKey: "deviceUUID") == nil {
+//            let uuid = NSUUID()
+//            UserDefaults.standard.set(uuid.uuidString, forKey: "deviceUUID")
+//            print("First time...", uuid.uuidString, "Int")
+//        } else {
+//            let savedUUIDString = UserDefaults.standard.string(forKey: "deviceUUID") ?? ""
+//            let uuid = NSUUID(uuidString: savedUUIDString)
+//            print("Previously saved", savedUUIDString, uuid, numberOfDevice)
+//        }
+    }
+    
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+    }
+    
+    override func didDeactivate() {
+        // This method is called when watch view controller is no longer visible
+        super.didDeactivate()
+    }
+    
+    //MARK:- Private Methods
+    func loadRechargeData(){
+        print("RechargeTB", rechargeTableView)
+        rechargeTableView.setNumberOfRows(rechargeArray.count, withRowType: "rechargeTableRow")
+        for (index, content) in rechargeArray.enumerated() {
+            let row = rechargeTableView.rowController(at: index) as! TablePartsController
+            row.allDataLabel.setText(content.title)
+            row.timeLabel.setText(content.time)
+            row.imageData.setImage(UIImage(named: content.imageName))
+        }
+    }
+}
+
+// EXTENSION - Push to Interface Controller
+extension RechargeInterfaceController {
+    override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
+        // Send JSON Data
+        let arrayData = rechargeArray[rowIndex]
+     //   AWSCall.sendDirection(arrayData.title)
+        self.pushController(withName: "TableTimerInterfaceController", context: self.rechargeArray[rowIndex])
+    }
+}
