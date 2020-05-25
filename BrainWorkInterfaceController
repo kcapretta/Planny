@@ -1,0 +1,62 @@
+//
+//  BrainWorkInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/24/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import WatchKit
+import Foundation
+
+//MARK:- Injuries = Body
+
+class BrainWorkInterfaceController: WKInterfaceController {
+    
+    //MARK:- Interface Builder
+    @IBOutlet weak var brainWorkTable: WKInterfaceTable!
+    
+    //MARK:- Properties
+    var brainWorkArray = [DataProvided(title: " CODING", time: "50:00", cardNumberData: "1", outOfNumberData: "/ 4", imageName: "CODING"),
+                         DataProvided(title: " WRITING", time: "45:00", cardNumberData: "2", outOfNumberData: "/ 4", imageName: "WRITING"),
+                         DataProvided(title: " UI UX", time: "60:00", cardNumberData: "3", outOfNumberData: "/ 4", imageName: "UI UX DESIGN"),
+                         DataProvided(title: " ITALIAN", time: "30:00", cardNumberData: "4", outOfNumberData: "/ 4", imageName: "ITALIAN")]
+    var selectedData = DataProvided()
+    
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        self.loadInjuriesData()
+        
+        let numberOfDevice = Int() + 1
+    }
+    
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+    }
+    
+    override func didDeactivate() {
+        // This method is called when watch view controller is no longer visible
+        super.didDeactivate()
+    }
+    
+    //MARK:- Private Methods
+    func loadInjuriesData(){
+        brainWorkTable.setNumberOfRows(brainWorkArray.count, withRowType: "brainWorkTableRow")
+        for (index, content) in brainWorkArray.enumerated() {
+            let row = brainWorkTable.rowController(at: index) as! TablePartsController
+            row.allDataLabel.setText(content.title)
+            row.timeLabel.setText(content.time)
+            row.imageData.setImage(UIImage(named: content.imageName))
+        }
+    }
+}
+
+// EXTENSION - Push to Interface Controller
+extension BrainWorkInterfaceController {
+    override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
+        let arrayData = brainWorkArray[rowIndex]
+        self.pushController(withName: "TableTimerInterfaceController", context: self.brainWorkArray[rowIndex])
+    }
+}
