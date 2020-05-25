@@ -1,0 +1,78 @@
+//
+//  TimerInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/15/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+import WatchKit
+import Foundation
+
+class TimerInterfaceController: WKInterfaceController {
+
+    //MARK:- Interface Builder
+    // Label for timer
+    @IBOutlet weak var lblCounter: WKInterfaceLabel!
+    
+    //MARK:- Properties
+    // Create Timer Functionality
+    var counter : Int!
+    var timer : Timer!
+        
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+
+        // By plus one
+        counter = 0
+            
+        timer = Timer.scheduledTimer(timeInterval: +1, target: self, selector: #selector(TimerInterfaceController.updateTimer), userInfo: nil, repeats: true)
+            
+        // Configure interface objects here.
+        }
+        
+        @objc func updateTimer()
+           {
+               counter = counter + 1
+               if(counter <= 90)
+           {
+               lblCounter.setText(String(counter))
+               }
+            else
+               {
+               if(timer != nil)
+               {
+                   timer.invalidate()
+               }
+               timer = nil
+               counter = 1
+                lblCounter.setText(String(counter))
+           }
+        }
+        
+        override func willActivate() {
+            // This method is called when watch view controller is about to be visible to user
+            super.willActivate()
+        }
+        
+        override func didDeactivate() {
+            // This method is called when watch view controller is no longer visible
+            super.didDeactivate()
+        }
+    
+        //MARK:- Private Methods
+    
+        @IBAction func startTapped() {
+              timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(TimerInterfaceController.updateTimer), userInfo: nil, repeats: true)
+            
+        }
+    
+        @IBAction func stopTapped() {
+            if(timer != nil)
+            {
+                timer.invalidate()
+            }
+            timer = nil
+        }
+
+    }
