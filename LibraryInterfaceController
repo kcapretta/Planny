@@ -1,0 +1,90 @@
+//
+//  LibraryInterfaceController.swift
+//  Planny WatchKit Extension
+//
+//  Created by Kassandra Capretta on 2/23/20.
+//  Copyright © 2020 Kassandra Capretta. All rights reserved.
+//
+
+import WatchKit
+import Foundation
+
+//MARK:- Data Structure
+enum CellContentType {
+    case Creativity
+    case Recharge
+    case BrainWork
+    
+    var title: String {
+        switch self {
+        // Daily Routines = Activity
+        case .Creativity:
+            return "🎨  Creativity"
+        case .Recharge:
+            return "🧘🏻‍♀️  Recharge"
+        // Injuries = Body
+        case .BrainWork:
+            return "🧠  Brain Work"
+        }
+    }
+    
+    var tableViewNumber: String {
+        switch self {
+        case .Creativity:
+            return "5"
+        case .Recharge:
+            return "3"
+        case .BrainWork:
+            return "4"
+        }
+    }
+}
+
+struct CellData {
+    let cellType: CellContentType
+}
+
+class LibraryInterfaceController: WKInterfaceController {
+    
+    //MARK:- Interface Builder
+    @IBOutlet weak var dataTableView: WKInterfaceTable!
+    
+    let cellsData = [
+        CellData(cellType: .Creativity),
+        CellData(cellType: .Recharge),
+        CellData(cellType: .BrainWork)
+    ]
+    
+    //MARK:- ViewController LifeCycle Methods
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        
+        // Increase device number with each device being added
+        let numberOfDevice = Int() + 1
+        
+        dataTableView.setNumberOfRows(cellsData.count, withRowType: "firstRow")
+        
+        cellsData
+            .enumerated()
+            .forEach { index, cellData in
+                let row = dataTableView.rowController(at: index) as! CellController 
+                row.optionLabel.setText(cellData.cellType.title)
+                row.tableNumber.setText(cellData.cellType.tableViewNumber)
+        }
+    }
+}
+
+// EXTENSION - Push to various Interface Controllers
+extension LibraryInterfaceController {
+    override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
+        let cellData = cellsData[rowIndex]
+        switch cellData.cellType {
+        case .Creativity:
+            self.pushController(withName: "CreativityInterfaceController", context: nil)
+        case .Recharge:
+            self.pushController(withName: "RechargeOptionsInterfaceController", context: nil)
+        case .BrainWork:
+            self.pushController(withName: "BrainWorkInterfaceController", context: nil)
+        }
+    }
+}
