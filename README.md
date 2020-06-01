@@ -2,6 +2,8 @@
 
 Watch a video of this app here: https://www.youtube.com/watch?v=_BIfEsag09o&feature=youtu.be
 
+Read more about Planny here: http://www.thelifeofkiki.com/planny
+
 Segment work easily — giving in to my main addiction: organization. I’ve personalized this application to specifically show the projects, interests and activities that I am currently focused on.
 
 ## Insights & Ideation
